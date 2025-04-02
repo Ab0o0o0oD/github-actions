@@ -33,12 +33,12 @@ jobs:
 
 This action requires the following secrets:
 
-| Secret Name           | Description |
-|---------------------|-------------|
-| `EMAIL_SERVICE_URL`  | The API URL for sending emails via Microsoft Graph |
-| `AZURE_TENANT_ID`    | Azure Tenant ID |
-| `AZURE_CLIENT_ID`    | Azure Client ID |
-| `AZURE_CLIENT_SECRET` | Azure Client Secret |
+| Secret Name           | Description                                                                                                      |
+|---------------------|------------------------------------------------------------------------------------------------------------------|
+| `EMAIL_SERVICE_URL`  | The API URL for sending emails via Microsoft Graph ex: https://graph.microsoft.com/v1.0/{{user/sender}}/sendMail |
+| `AZURE_TENANT_ID`    | Azure Tenant ID                                                                                                  |
+| `AZURE_CLIENT_ID`    | Azure Client ID                                                                                                  |
+| `AZURE_CLIENT_SECRET` | Azure Client Secret                                                                                              |
 
 ## How It Works
 
