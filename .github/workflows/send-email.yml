@@ -1,0 +1,62 @@
+name: "Send Email via MS Graph"
+
+inputs:
+  recipient_email:
+    description: "Recipient email address"
+    required: true
+  attachment_path:
+    description: "Path to the file to attach"
+    required: true
+  attachment_mime_type:
+    description: "MIME type of the attachment"
+    required: true
+  subject:
+    description: "Email subject"
+    required: true
+  body_content:
+    description: "Email body content"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Send Email
+      shell: bash
+      run: |
+        base64 -i "${{ inputs.attachment_path }}" | jq -Rs '
+        {
+          message: {
+            subject: "${{ inputs.subject }}",
+            body: {
+              contentType: "Text",
+              content: "${{ inputs.body_content }}"
+            },
+            toRecipients: [
+              {
+                emailAddress: {
+                  address: "${{ inputs.recipient_email }}"
+                }
+              }
+            ],
+            attachments: [
+              {
+                "@odata.type": "#microsoft.graph.fileAttachment",
+                name: "${{ inputs.attachment_path }}",
+                contentType: "${{ inputs.attachment_mime_type }}",
+                contentBytes: .
+              }
+            ]
+          }
+        }' > email_payload.json
+
+        curl --location '${{ secrets.EMAIL_SERVICE_URL }}' \
+        --header 'Content-Type: application/json' \
+        --header "Authorization: Bearer $(curl -s -X POST "https://login.microsoftonline.com/${{ secrets.AZURE_TENANT_ID }}/oauth2/v2.0/token" \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+          -d "client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+          -d "client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" \
+          -d "scope=https://graph.microsoft.com/.default" \
+          -d "grant_type=client_credentials" | jq -r .access_token)" \
+          --data-binary "@email_payload.json"
+
+        rm email_payload.json

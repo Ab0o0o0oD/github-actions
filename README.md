@@ -1,16 +1,16 @@
-# Send Email via MS Graph
+# Send Email via Microsoft Graph API
 
-This GitHub Action allows you to send an email with an attachment using Microsoft Graph API.
+This GitHub Action sends an email via the Microsoft Graph API with an attachment.
 
 ## Inputs
 
-| Name             | Description                          | Required |
-|----------------|----------------------------------|----------|
-| `receiver-email` | Recipient email address          | ✅       |
-| `file-path`      | Path to the file to attach       | ✅       |
-| `content-type`   | MIME type of the attachment     | ✅       |
-| `email-subject`  | Email subject                   | ✅       |
-| `email-content`  | Email body content              | ✅       |
+| Name                 | Description                     | Required |
+|----------------------|---------------------------------|----------|
+| `recipient_email`    | Recipient email address        | ✅       |
+| `attachment_path`    | Path to the file to attach     | ✅       |
+| `attachment_mime_type` | MIME type of the attachment | ✅       |
+| `subject`           | Email subject                  | ✅       |
+| `body_content`      | Email body content             | ✅       |
 
 ## Usage
 
@@ -20,13 +20,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Email via MS Graph
-        uses: ./
+        uses: your-repo/send-email-action@v1
         with:
-          receiver-email: "recipient@example.com"
-          file-path: "path/to/attachment.pdf"
-          content-type: "application/pdf"
-          email-subject: "Subject of the email"
-          email-content: "Hello, this is the email body."
+          recipient_email: "example@example.com"
+          attachment_path: "./report.pdf"
+          attachment_mime_type: "application/pdf"
+          subject: "Monthly Report"
+          body_content: "Please find the attached report."
 ```
 
 ## Secrets
@@ -53,7 +53,4 @@ This action requires the following secrets:
 - The MIME type of the attachment should match the actual file type.
 - The email is sent using the `application/json` content type.
 
-## License
-
-This project is licensed under the MIT License.
 
